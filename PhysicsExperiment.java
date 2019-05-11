@@ -39,8 +39,55 @@ public class PhysicsExperiment {
 
     // Your code goes here
 
+    //Initailization 
+    int currentStudent=1; // There's no student 0, so we start from student 1. Row
+    int currentStep=1;  //There's no step 0, so we start from step 1. Col
+    int stepsLeft= numSteps;  //To assist with while loop an alias is created
+    int globalDone, innerDone = 0;
+    
+    //
+    while(0 < stepsLeft) {   	// While loop will decrement the number of steps left until it hits 0...Fundamentals of a non-infinte while loop
+    	if(signUpTable[currentStudent][currentStep]==0) {// So if there at the location in the array there's no value except 0, then lets go
+    		if(currentStep!=numSteps) {// Is the number of Steps possible ewual to the index of 
+    			globalDone =0; //A counter to count the number of steps most done by a student
+    			int studentGreater=1;  // We set this to 1 because 1 is what we start with; Student 1, of course. This holds the student who has done the most amount of steps, so we cannot arbitarirly just choose anything else
+    
+          //2 while loops concurrently accessing array
+          for(int row=1; row<=numStudents; row++) { //Start from row 1, if not where elese? To go through to all the students 
+    				innerDone=0; //A counter to count the most number of steps done by a student** DOne with each iteration of for loop of students because where else
+    				for(int col=currentStep; col<=numSteps; col++) { // start column from the step we are at. It doesn't make sense to start elsewhere
+    					if(signUpTable[row][col]==0) { // We didn't find what we are looking for because student didn't sign up; As stated above
+    						break; // SO leave the for loop to go the next iteration
+    					}
+    					else {
+    						innerDone++; // We found a location where we haven't hit a student who has not signed up
+              }
+              //Globally set vs Inner Set situation, meaning we are comparing the values of these counters 
+    					if( globalDone < innerDone) { // If the value of the globally set value of consecutive 1 is less than the value we find searching...
+    					 globalDone= innerDone; // If you cannot beat them , join them! So now global holds the greater value
+    						studentGreater=row; // We set the student with the greatest number of steps here
+    					}
+    				}//for loop 2
+    			}//for loop 1
+    			currentStudent= studentGreater;  // currentStudent holds the value for the student who can do the most number of contiguous steps..
+        }//if
+    		else {
+    			if(currentStudent==numStudents)	currentStudent=1; // if we have the limits of the array, we go back to student 1
+    			else currentStudent++; // Else we go to the next student
+    		}// else
+    	}// if 
+    	else {
+        scheduleTable[currentStudent][currentStep]=1;  // 1 meaning we sign up that student for  that step
+        stepsLeft = stepsLeft -1; // decrease the value of stepsLeft ** WHILE LOOP
+    		currentStep++; //We go the next Step/Col because of the restriction of one student to a step
+    		
+    	}//else 
+    }//While loop
+
     return scheduleTable;
   }
+
+
 
   /**
    * Makes the convenient lookup table based on the steps each student says they can do
